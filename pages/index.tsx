@@ -1,30 +1,27 @@
 export default function Home() {
   return (
-    <div className="grid min-h-screen gap-10 space-y-5 bg-slate-400 py-20 px-20 lg:grid-cols-2 xl:grid-cols-3 xl:place-content-center">
-      <div className="flex flex-col rounded-3xl bg-white p-6 shadow-xl">
-        <span className="text-3xl font-semibold">Select Item</span>
-        <ul>
-          {[1, 2, 3, 4, 5].map((i) => (
-            <div key={i} className=" my-2 flex justify-between">
-              <span className="text-gray-500">Grey Chair</span>
-              <span className="font-semibold">$19</span>
-            </div>
-          ))}
-        </ul>
-        {["a", "b", "c", ""].map((c, i) => (
-          <li className="bg-red-50 py-2 empty:hidden" key={i}>
-            {c}
-          </li>
-        ))}
+    <div className="dark grid min-h-screen gap-10 space-y-5 bg-slate-400 py-20 px-20 lg:grid-cols-2 xl:grid-cols-3 xl:place-content-center">
+      <div className="flex flex-col rounded-3xl bg-white p-6 shadow-xl dark:bg-black">
+        <span className="text-3xl font-semibold dark:text-white">
+          Select Item
+        </span>
+        <div className=" my-2 flex justify-between">
+          <span className="text-gray-500 dark:text-gray-100">Grey Chair</span>
+          <span className="font-semibold dark:text-gray-50">$19</span>
+        </div>
+        <div className=" my-2 flex justify-between">
+          <span className="text-gray-500 dark:text-gray-100">Grey Chair</span>
+          <span className="font-semibold dark:text-gray-50">$19</span>
+        </div>
         <div className=" mt-2 flex justify-between border-t-2 border-dashed pt-2">
           <span>Total</span>
           <span className="font-semibold">$9</span>
         </div>
-        <button className="mx-auto mt-5 block w-3/4 rounded-xl bg-blue-500 p-3 text-center text-white hover:bg-teal-500 hover:text-black focus:bg-red-500 active:bg-yellow-500">
+        <button className="dr mx-auto mt-5 block w-3/4 rounded-xl bg-blue-500 p-3 text-center text-white hover:bg-teal-500 hover:text-black focus:bg-red-500 active:bg-yellow-500 dark:border dark:border-white dark:bg-black dark:hover:bg-white">
           Check Out
         </button>
       </div>
-      <div className="group overflow-hidden rounded-3xl bg-white shadow-xl">
+      <div className="group overflow-hidden rounded-3xl bg-white shadow-xl ">
         <div className="bg-blue-500 p-6 pb-14 xl:pb-40 portrait:bg-indigo-600 landscape:bg-teal-500">
           <span className="text-2xl text-white">Profile</span>
         </div>
