@@ -1,4 +1,4 @@
-export default function Live() {
+export default function Streams() {
   return (
     <div className="space-y-4 divide-y-2 py-10">
       {[1, 1, 1, 1, 1, 1, 1].map((_, i) => (
