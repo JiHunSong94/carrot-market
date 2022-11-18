@@ -21,14 +21,9 @@ export default function Layout({
   };
   return (
     <div>
-      <div
-        className={cls(
-          !canGoBack ? "justify-center" : "",
-          "fixed top-0 flex w-full max-w-xl items-center border-b bg-white py-3 px-10 text-lg font-medium text-gray-800"
-        )}
-      >
+      <div className="fixed top-0 flex h-12 w-full max-w-xl items-center justify-center  border-b bg-white px-10 text-lg  font-medium text-gray-800">
         {canGoBack ? (
-          <button onClick={onClick}>
+          <button onClick={onClick} className="absolute left-4">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -45,13 +40,22 @@ export default function Layout({
             </svg>
           </button>
         ) : null}
-        {title ? <span>{title}</span> : null}
+        {title ? (
+          <span className={cls(canGoBack ? "mx-auto" : "", "")}>{title}</span>
+        ) : null}
       </div>
       <div className={cls("pt-12", hasTabBar ? "pb-24" : "")}>{children}</div>
       {hasTabBar ? (
-        <nav className="fixed bottom-0 flex w-full justify-between border-t bg-white px-10 pb-5 pt-3 text-xs text-gray-700">
+        <nav className="fixed bottom-0 flex w-full max-w-xl justify-between border-t bg-white px-10 pb-5 pt-3 text-xs text-gray-700">
           <Link href="/">
-            <div className="flex flex-col items-center space-y-2">
+            <div
+              className={cls(
+                "flex flex-col items-center space-y-2",
+                router.pathname === "/"
+                  ? "text-orange-500"
+                  : "transition-colors hover:text-gray-500"
+              )}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -70,7 +74,14 @@ export default function Layout({
             </div>
           </Link>
           <Link href="/community">
-            <div className="flex flex-col items-center space-y-2">
+            <div
+              className={cls(
+                "flex flex-col items-center space-y-2",
+                router.pathname === "/community"
+                  ? "text-orange-500"
+                  : "transition-colors hover:text-gray-500"
+              )}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -90,7 +101,14 @@ export default function Layout({
             </div>
           </Link>
           <Link href="/chats">
-            <div className="flex flex-col items-center space-y-2">
+            <div
+              className={cls(
+                "flex flex-col items-center space-y-2",
+                router.pathname === "/chats"
+                  ? "text-orange-500"
+                  : "transition-colors hover:text-gray-500"
+              )}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -109,7 +127,14 @@ export default function Layout({
             </div>
           </Link>
           <Link href="/streams">
-            <div className="flex flex-col items-center space-y-2">
+            <div
+              className={cls(
+                "flex flex-col items-center space-y-2",
+                router.pathname === "/streams"
+                  ? "text-orange-500"
+                  : "text-gray-500 transition-colors"
+              )}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -127,7 +152,14 @@ export default function Layout({
             </div>
           </Link>
           <Link href="/profile">
-            <div className="flex flex-col items-center space-y-2">
+            <div
+              className={cls(
+                "flex flex-col items-center space-y-2",
+                router.pathname === "/profile"
+                  ? "text-orange-500"
+                  : "text-gray-500 transition-colors"
+              )}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
