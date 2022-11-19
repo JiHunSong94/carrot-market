@@ -2,7 +2,7 @@ interface InputProps {
   label: string;
   name: string;
   kind?: "text" | "phone" | "price";
-  required?: true;
+  [key: string]: any;
 }
 
 export default function Input({

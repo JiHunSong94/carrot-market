@@ -4,7 +4,7 @@ import Layout from "../../components/layout";
 
 export default function Streams() {
   return (
-    <Layout hasTabBar>
+    <Layout hasTabBar title="라이브">
       <div className="space-y-4 divide-y-2">
         {[1, 1, 1, 1, 1, 1, 1].map((_, i) => (
           <Link key={i} href={`/streams/${i}`}>
@@ -19,7 +19,7 @@ export default function Streams() {
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
-            stroke-width="1.5"
+            strokeWidth="1.5"
             stroke="currentColor"
             className="h-6 w-6"
           >

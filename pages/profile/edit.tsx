@@ -22,7 +22,13 @@ export default function EditProfile() {
           </label>
         </div>
         <Input required label="Email address" name="email" type="email" />
-        <Input required label="Phone number" type="number" kind="phone" />
+        <Input
+          required
+          label="Phone number"
+          type="number"
+          kind="phone"
+          name="phone"
+        />
         <Button text="Update profile" />
       </form>
     </Layout>

@@ -1,8 +1,7 @@
 interface TextAreaProps {
   name?: string;
   label?: string;
-  required?: true;
-  placeholder?: string;
+  [key: string]: any;
 }
 
 export default function TextArea({ name, label, placeholder }: TextAreaProps) {

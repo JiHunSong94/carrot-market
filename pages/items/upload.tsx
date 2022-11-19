@@ -30,6 +30,7 @@ export default function Upload() {
         <Input required label="Name" name="name" type="text" />
         <Input
           required
+          name="price"
           kind="price"
           label="Price"
           placeholder="0.00"
