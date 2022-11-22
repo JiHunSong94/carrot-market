@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import Button from "../components/button";
 import Input from "../components/input";
 import { cls } from "../libs/utils";
 
@@ -9,6 +10,7 @@ interface EnterForm {
 }
 
 export default function Enter() {
+  const [submitting, setSubmitting] = useState(false);
   const { register, watch, handleSubmit, reset } = useForm<EnterForm>();
   const [method, setMethod] = useState<"email" | "phone">("email");
   const onEmailClick = () => {
@@ -20,7 +22,12 @@ export default function Enter() {
     setMethod("phone");
   };
   const onValid = (data: EnterForm) => {
-    console.log(data);
+    setSubmitting(true);
+    fetch("/api/users/enter", {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: { "Content-Type": "application/json" },
+    }).then(() => setSubmitting(false));
   };
   return (
     <div className="mt-16 px-4">
@@ -76,10 +83,12 @@ export default function Enter() {
               required
             />
           ) : null}
-          <button className="mt-5 rounded-md border border-transparent bg-orange-500 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2">
-            {method === "email" ? "Get login link" : null}
-            {method === "phone" ? "Get one-time password" : null}
-          </button>
+          {method === "email" ? (
+            <Button text={submitting ? "Loading" : "Get login link"} />
+          ) : null}
+          {method === "phone" ? (
+            <Button text={submitting ? "Loading" : "Get one-time password"} />
+          ) : null}
         </form>
         <div className="mt-8">
           <div className="relative">
