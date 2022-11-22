@@ -1,5 +1,5 @@
-import Layout from "../../components/layout";
-import TextArea from "../../components/textarea";
+import Layout from "@components/layout";
+import TextArea from "@components/textarea";
 
 export default function Write() {
   return (

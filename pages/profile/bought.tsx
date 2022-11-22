@@ -1,5 +1,5 @@
-import Item from "../../components/item";
-import Layout from "../../components/layout";
+import Item from "@components/item";
+import Layout from "@components/layout";
 
 export default function Bought() {
   return (
