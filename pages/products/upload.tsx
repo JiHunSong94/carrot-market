@@ -23,19 +23,11 @@ export default function Upload() {
                 strokeLinejoin="round"
               />
             </svg>
-
             <input className="hidden" type="file" />
           </label>
         </div>
         <Input required label="Name" name="name" type="text" />
-        <Input
-          required
-          name="price"
-          kind="price"
-          label="Price"
-          placeholder="0.00"
-          type="text"
-        />
+        <Input required name="price" kind="price" label="Price" type="text" />
         <TextArea name="description" label="description" />
         <Button text="Upload item" />
       </form>
