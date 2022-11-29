@@ -1,7 +1,14 @@
 import Button from "@components/button";
 import Layout from "@components/layout";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import useSWR from "swr";
 
 export default function ItemDetail() {
+  const router = useRouter();
+  const { data } = useSWR(
+    router.query.id ? `/api/products/${router.query.id}` : null
+  );
   return (
     <Layout canGoBack>
       <div className="px-4 py-10">
@@ -10,24 +17,25 @@ export default function ItemDetail() {
           <div className="flex cursor-pointer items-center space-x-3 border-t border-b py-3">
             <div className="h-12 w-12 rounded-full bg-slate-300" />
             <div>
-              <p className="fond-medium text-sm text-gray-700">Steve Jebs</p>
-              <p className="text-xs font-medium text-gray-500">
-                View profile &rarr;
+              <p className="fond-medium text-sm text-gray-700">
+                {data?.product?.user?.name}
               </p>
+              <Link href={`/users/profiles/${data?.product?.user?.id}`}>
+                <p className="text-xs font-medium text-gray-500">
+                  View profile &rarr;
+                </p>
+              </Link>
             </div>
           </div>
           <div className="mt-5">
-            <h1 className="text-3xl font-bold text-gray-900">Galaxy S50</h1>
-            <p className="mt-3 block text-3xl text-gray-900">$140</p>
+            <h1 className="text-3xl font-bold text-gray-900">
+              {data?.product?.name}
+            </h1>
+            <p className="mt-3 block text-3xl text-gray-900">
+              ${data?.product?.price}
+            </p>
             <p className="my-6 text-base text-gray-700">
-              My money&apos;s in that office, right? If she start giving me some
-              bullshit about it ain&apos;t there, and we got to go someplace
-              else and get it, I&apos;m gonna shoot you in the head then and
-              there. Then I&apos;m gonna shoot that bitch in the kneecaps, find
-              out where my goddamn money is. She gonna tell me too. Hey, look at
-              me when I&apos;m talking to you, motherfucker. You listen: we go
-              in there, and that ni**a Winston or anybody else is in there, you
-              the first motherfucker to get shot. You understand?
+              {data?.product?.description}
             </p>
             <div className="flex items-center justify-between space-x-2">
               <Button large text="Talk to seller" />
