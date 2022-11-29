@@ -2,11 +2,25 @@ import Button from "@components/button";
 import Input from "@components/input";
 import Layout from "@components/layout";
 import TextArea from "@components/textarea";
+import useMutation from "@libs/client/useMutation";
+import { useForm } from "react-hook-form";
+
+interface UploadProductForm {
+  name: string;
+  price: number;
+  description: string;
+}
 
 export default function Upload() {
+  const [uploadProduct, { loading, data }] = useMutation("/api/products");
+  const { register, handleSubmit } = useForm<UploadProductForm>();
+  const onValid = (data: UploadProductForm) => {
+    if (loading) return;
+    uploadProduct(data);
+  };
   return (
     <Layout canGoBack title="Upload Product">
-      <form className="space-y-4 p-4">
+      <form onSubmit={handleSubmit(onValid)} className="space-y-4 p-4">
         <div>
           <label className="flex h-48 w-full items-center justify-center rounded-md border-2 border-dashed border-gray-300 py-6 text-gray-600 hover:border-orange-500 hover:text-orange-500">
             <svg
@@ -26,10 +40,27 @@ export default function Upload() {
             <input className="hidden" type="file" />
           </label>
         </div>
-        <Input required label="Name" name="name" type="text" />
-        <Input required name="price" kind="price" label="Price" type="text" />
-        <TextArea name="description" label="description" />
-        <Button text="Upload item" />
+        <Input
+          register={register("name", { required: true })}
+          required
+          label="Name"
+          name="name"
+          type="text"
+        />
+        <Input
+          register={register("price", { required: true })}
+          required
+          name="price"
+          kind="price"
+          label="Price"
+          type="text"
+        />
+        <TextArea
+          register={register("description", { required: true })}
+          name="description"
+          label="description"
+        />
+        <Button text={loading ? "Loading..." : "Upload item"} />
       </form>
     </Layout>
   );
