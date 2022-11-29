@@ -1,14 +1,26 @@
 import Button from "@components/button";
 import Layout from "@components/layout";
+import { Product, User } from "@prisma/client";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 
+interface ProductWithUser extends Product {
+  user: User;
+}
+
+interface ItemDetailResponse {
+  ok: boolean;
+  product: ProductWithUser;
+  relatedProducts: Product[];
+}
+
 export default function ItemDetail() {
   const router = useRouter();
-  const { data } = useSWR(
+  const { data } = useSWR<ItemDetailResponse>(
     router.query.id ? `/api/products/${router.query.id}` : null
   );
+  console.log(data?.relatedProducts);
   return (
     <Layout canGoBack>
       <div className="px-4 py-10">
@@ -41,7 +53,7 @@ export default function ItemDetail() {
               <Button large text="Talk to seller" />
               <button className="flex items-center justify-center rounded-md p-3 text-gray-400 hover:bg-gray-100 hover:text-gray-500">
                 <svg
-                  className="h-6 w-6 "
+                  className="h-6 w-6"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -62,11 +74,13 @@ export default function ItemDetail() {
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Similar items</h2>
           <div className="grid grid-cols-2 gap-4">
-            {[1, 2, 3, 4, 5, 6].map((_, i) => (
-              <div key={i}>
+            {data?.relatedProducts.map((product) => (
+              <div key={product.id}>
                 <div className="mb-4 h-56 w-full bg-slate-300" />
-                <h3 className="-mb-1 text-gray-700">Galaxy S60</h3>
-                <span className="text-sm font-medium text-gray-900">$6</span>
+                <h3 className="-mb-1 text-gray-700">{product.name}</h3>
+                <span className="text-sm font-medium text-gray-900">
+                  ${product.price}
+                </span>
               </div>
             ))}
           </div>
