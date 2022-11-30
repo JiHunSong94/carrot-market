@@ -1,11 +1,12 @@
 import Button from "@components/button";
 import Layout from "@components/layout";
 import useMutation from "@libs/client/useMutation";
+import useUser from "@libs/client/useUser";
 import { cls } from "@libs/client/utils";
 import { Product, User } from "@prisma/client";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 
 interface ProductWithUser extends Product {
   user: User;
@@ -19,14 +20,23 @@ interface ItemDetailResponse {
 }
 
 export default function ItemDetail() {
+  const { user, isLoading } = useUser();
   const router = useRouter();
-  const { data, mutate } = useSWR<ItemDetailResponse>(
+  const { mutate } = useSWRConfig();
+  const { data, mutate: boundMutate } = useSWR<ItemDetailResponse>(
     router.query.id ? `/api/products/${router.query.id}` : null
   );
   const [toggleFav] = useMutation(`/api/products/${router.query.id}/fav`);
   const onFavClick = () => {
     if (!data) return;
-    mutate({ ...data, isLiked: !data.isLiked }, false);
+    boundMutate((prev) => prev && { ...prev, isLiked: !prev.isLiked }, false);
+    /* mutate(
+      "/api/users/me",
+      (prev: any) => {
+        ok: !prev.ok;
+      },
+      false
+    ); */
     toggleFav({});
   };
   return (
@@ -100,7 +110,7 @@ export default function ItemDetail() {
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Similar items</h2>
           <div className="grid grid-cols-2 gap-4">
-            {data?.relatedProducts.map((product) => (
+            {data?.relatedProducts?.map((product) => (
               <div key={product.id}>
                 <div className="mb-4 h-56 w-full bg-slate-300" />
                 <h3 className="-mb-1 text-gray-700">{product.name}</h3>
