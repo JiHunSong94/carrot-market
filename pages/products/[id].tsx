@@ -20,7 +20,6 @@ export default function ItemDetail() {
   const { data } = useSWR<ItemDetailResponse>(
     router.query.id ? `/api/products/${router.query.id}` : null
   );
-  console.log(data?.relatedProducts);
   return (
     <Layout canGoBack>
       <div className="px-4 py-10">
