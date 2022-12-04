@@ -21,7 +21,9 @@ interface PostsResponse {
 export default function Community() {
   const { latitude, longitude } = useCoords();
   const { data } = useSWR<PostsResponse>(
-    `/api/posts?latitude=${latitude}&longitude=${longitude}`
+    latitude && longitude
+      ? `/api/posts?latitude=${latitude}&longitude=${longitude}`
+      : null
   );
   return (
     <Layout hasTabBar title="동네생활">
