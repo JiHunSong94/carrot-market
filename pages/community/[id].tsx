@@ -80,8 +80,9 @@ export default function CommutinyPostDetail() {
     }
     if (answerData && answerData.ok) {
       reset();
+      mutate();
     }
-  }, [router, data, answerData, reset]);
+  }, [router, data, answerData, reset, mutate]);
   return (
     <Layout canGoBack>
       <div>
@@ -158,7 +159,7 @@ export default function CommutinyPostDetail() {
                   {answer.user.name}
                 </span>
                 <span className="block text-xs text-gray-500">
-                  {answer.createdAt}
+                  {answer.createdAt.toString()}
                 </span>
                 <p className="mt-2 text-gray-700">{answer.answer}</p>
               </div>
