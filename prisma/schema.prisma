@@ -142,7 +142,7 @@ model Record {
   productId Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  kind      Kind
+  kind      String
 }
 
 enum Kind {
