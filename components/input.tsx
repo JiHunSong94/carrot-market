@@ -57,7 +57,7 @@ export default function Input({
             id={name}
             {...register}
             type={type}
-            required
+            required={required}
             className="w-full appearance-none rounded-md rounded-l-none border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-orange-500 focus:ring-orange-500"
           />
         </div>

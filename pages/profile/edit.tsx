@@ -1,14 +1,21 @@
 import Button from "@components/button";
 import Input from "@components/input";
 import Layout from "@components/layout";
+import useMutation from "@libs/client/useMutation";
 import useUser from "@libs/client/useUser";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 interface EditProfileForm {
+  name?: string;
   email?: string;
   phone?: string;
   formErrors?: string;
+}
+
+interface EditProfileResponse {
+  ok: boolean;
+  error?: string;
 }
 
 export default function EditProfile() {
@@ -20,14 +27,25 @@ export default function EditProfile() {
     setError,
     formState: { errors },
   } = useForm<EditProfileForm>();
-  const onValid = ({ email, phone }: EditProfileForm) => {
-    if (email === "" && phone === "") {
+  const [editProfile, { data, loading }] =
+    useMutation<EditProfileResponse>("/api/users/me");
+  const onValid = ({ name, email, phone }: EditProfileForm) => {
+    if (loading) return;
+    if (email === "" && phone === "" && name === "") {
       setError("formErrors", {
         message: "Email OR Phone number are required. You need to choose one.",
       });
     }
+    editProfile({
+      name,
+      email,
+      phone,
+    });
   };
   useEffect(() => {
+    if (user?.name) {
+      setValue("name", user.name);
+    }
     if (user?.email) {
       setValue("email", user.email);
     }
@@ -35,6 +53,11 @@ export default function EditProfile() {
       setValue("phone", user.phone);
     }
   }, [user, setValue]);
+  useEffect(() => {
+    if (data && !data.ok && data.error) {
+      setError("formErrors", { message: data.error });
+    }
+  }, [data, setError]);
   return (
     <Layout canGoBack title="Edit Profile">
       <form onSubmit={handleSubmit(onValid)} className="space-y-4 py-10 px-4">
@@ -54,6 +77,13 @@ export default function EditProfile() {
           </label>
         </div>
         <Input
+          register={register("name")}
+          required={false}
+          label="Name"
+          name="name"
+          type="text"
+        />
+        <Input
           register={register("email")}
           required={false}
           label="Email address"
@@ -64,16 +94,16 @@ export default function EditProfile() {
           register={register("phone")}
           required={false}
           label="Phone number"
-          type="number"
-          kind="phone"
           name="phone"
+          type="text"
+          kind="phone"
         />
         {errors.formErrors ? (
           <span className="my-2 block font-bold text-red-500">
             {errors.formErrors.message}
           </span>
         ) : null}
-        <Button text="Update profile" />
+        <Button text={loading ? "Loading..." : "Update profile"} />
       </form>
     </Layout>
   );
