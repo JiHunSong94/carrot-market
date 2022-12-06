@@ -1,7 +1,9 @@
 import Layout from "@components/layout";
 import Message from "@components/message";
+import useMutation from "@libs/client/useMutation";
 import { Stream } from "@prisma/client";
 import { useRouter } from "next/router";
+import { useForm } from "react-hook-form";
 import useSWR from "swr";
 
 interface StreamResponse {
@@ -9,12 +11,24 @@ interface StreamResponse {
   stream: Stream;
 }
 
+interface MessageForm {
+  message: string;
+}
+
 export default function StreamDetail() {
   const router = useRouter();
+  const { register, handleSubmit, reset } = useForm<MessageForm>();
   const { data } = useSWR<StreamResponse>(
     router.query.id ? `/api/streams/${router.query.id}` : null
   );
-  console.log(data);
+  const [sendMessage, { loading, data: sendMessageData }] = useMutation(
+    `/api/streams/${router.query.id}/messages`
+  );
+  const onValid = (form: MessageForm) => {
+    if (loading) return;
+    reset();
+    sendMessage(form);
+  };
   return (
     <Layout canGoBack>
       <div className="space-y-4 px-4 py-10">
@@ -38,9 +52,13 @@ export default function StreamDetail() {
           <Message message="Hi how much are you selling them for?" />
           <Message message="I want ￦20,000" reversed />
         </div>
-        <div className="fixed inset-x-0 bottom-0 bg-white py-2">
+        <form
+          onSubmit={handleSubmit(onValid)}
+          className="fixed inset-x-0 bottom-0 bg-white py-2"
+        >
           <div className="relative mx-auto flex w-full max-w-md items-center">
             <input
+              {...register("message", { required: true })}
               type="text"
               className="w-full rounded-full border-gray-300 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-orange-500"
             />
@@ -50,7 +68,7 @@ export default function StreamDetail() {
               </button>
             </div>
           </div>
-        </div>
+        </form>
       </div>
     </Layout>
   );
