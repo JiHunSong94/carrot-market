@@ -1,14 +1,29 @@
 import Layout from "@components/layout";
 import Message from "@components/message";
 import useMutation from "@libs/client/useMutation";
+import useUser from "@libs/client/useUser";
 import { Stream } from "@prisma/client";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import useSWR from "swr";
 
+interface StreamMessage {
+  id: number;
+  message: string;
+  user: {
+    avatar?: string;
+    id: number;
+  };
+}
+
+interface StreamWithMessages extends Stream {
+  messages: StreamMessage[];
+}
+
 interface StreamResponse {
   ok: boolean;
-  stream: Stream;
+  stream: StreamWithMessages;
 }
 
 interface MessageForm {
@@ -17,8 +32,9 @@ interface MessageForm {
 
 export default function StreamDetail() {
   const router = useRouter();
+  const { user } = useUser();
   const { register, handleSubmit, reset } = useForm<MessageForm>();
-  const { data } = useSWR<StreamResponse>(
+  const { data, mutate } = useSWR<StreamResponse>(
     router.query.id ? `/api/streams/${router.query.id}` : null
   );
   const [sendMessage, { loading, data: sendMessageData }] = useMutation(
@@ -29,28 +45,34 @@ export default function StreamDetail() {
     reset();
     sendMessage(form);
   };
+  useEffect(() => {
+    if (sendMessageData && sendMessageData.ok) {
+      mutate();
+    }
+  }, [sendMessageData, mutate]);
+
   return (
     <Layout canGoBack>
       <div className="space-y-4 px-4 py-10">
         <div className="aspect-video w-full rounded-sm bg-slate-300" />
         <div>
           <h1 className="text-3xl font-bold text-gray-900">
-            {data?.stream.name}
+            {data?.stream?.name}
           </h1>
           <span className="mt-3 block text-2xl text-gray-900">
-            {data?.stream.price}
+            {data?.stream?.price}
           </span>
-          <p className="my-6 text-gray-700">{data?.stream.description}</p>
+          <p className="my-6 text-gray-700">{data?.stream?.description}</p>
         </div>
-        <div className="mt-10 h-[50vh] space-y-4 overflow-y-scroll px-4 pb-16">
-          <Message message="Hi how much are you selling them for?" />
-          <Message message="I want ￦20,000" reversed />
-          <Message message="Hi how much are you selling them for?" />
-          <Message message="I want ￦20,000" reversed />
-          <Message message="Hi how much are you selling them for?" />
-          <Message message="I want ￦20,000" reversed />
-          <Message message="Hi how much are you selling them for?" />
-          <Message message="I want ￦20,000" reversed />
+        <h2 className="text-2xl font-bold text-gray-900">Live Chat</h2>
+        <div className="h-[50vh] space-y-4 overflow-y-scroll px-4 py-10 pb-16">
+          {data?.stream.messages.map((message) => (
+            <Message
+              key={message.id}
+              message={message.message}
+              reversed={message.user.id === user.id}
+            />
+          ))}
         </div>
         <form
           onSubmit={handleSubmit(onValid)}
