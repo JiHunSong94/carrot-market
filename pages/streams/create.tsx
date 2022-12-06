@@ -3,6 +3,7 @@ import Input from "@components/input";
 import Layout from "@components/layout";
 import TextArea from "@components/textarea";
 import useMutation from "@libs/client/useMutation";
+import { Stream } from "@prisma/client";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -13,6 +14,11 @@ interface CreateForm {
   description: string;
 }
 
+interface CreateResponse {
+  ok: boolean;
+  stream: Stream;
+}
+
 export default function Create() {
   const router = useRouter();
   const { register, handleSubmit } = useForm<CreateForm>();
@@ -20,13 +26,14 @@ export default function Create() {
     if (loading) return;
     createStream(form);
   };
-  const [createStream, { data, loading }] = useMutation(`/api/streams`);
+  const [createStream, { data, loading }] =
+    useMutation<CreateResponse>(`/api/streams`);
   console.log(data);
-  /* useEffect(() => {
+  useEffect(() => {
     if (data && data.ok) {
-      router.push(`/streams/${id})
+      router.push(`/streams/${data.stream.id}`);
     }
-  }, [data]); */
+  }, [data, router]);
   return (
     <Layout canGoBack title="Go Live">
       <form onSubmit={handleSubmit(onValid)} className="space-y-4 py-10 px-4">
@@ -38,7 +45,7 @@ export default function Create() {
           required
         />
         <Input
-          register={register("price", { required: true })}
+          register={register("price", { required: true, valueAsNumber: true })}
           label="Price"
           name="price"
           kind="price"

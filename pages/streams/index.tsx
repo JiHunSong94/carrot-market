@@ -1,16 +1,26 @@
 import Link from "next/link";
 import FloatingButton from "@components/floating-button";
 import Layout from "@components/layout";
+import useSWR from "swr";
+import { Stream } from "@prisma/client";
+
+interface StreamsResponse {
+  ok: boolean;
+  streams: Stream[];
+}
 
 export default function Streams() {
+  const { data } = useSWR<StreamsResponse>("/api/streams");
   return (
     <Layout hasTabBar title="라이브">
-      <div className="space-y-4 divide-y-2">
-        {[1, 1, 1, 1, 1, 1, 1].map((_, i) => (
-          <Link key={i} href={`/streams/${i}`}>
-            <div className="px-4 pt-4">
-              <div className="aspect-video w-full rounded-sm bg-slate-300" />
-              <h3 className="mt-2 text-lg text-gray-700">Live Commercial!</h3>
+      <div className="space-y-4 divide-y-[1px]">
+        {data?.streams.map((stream) => (
+          <Link key={stream.id} href={`/streams/${stream.id}`}>
+            <div className="block px-4 pt-4">
+              <div className="aspect-video w-full rounded-md bg-slate-300 shadow-sm" />
+              <h3 className="mt-2 text-2xl font-bold text-gray-900">
+                {stream.name}
+              </h3>
             </div>
           </Link>
         ))}
