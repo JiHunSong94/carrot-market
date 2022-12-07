@@ -35,7 +35,10 @@ export default function StreamDetail() {
   const { user } = useUser();
   const { register, handleSubmit, reset } = useForm<MessageForm>();
   const { data, mutate } = useSWR<StreamResponse>(
-    router.query.id ? `/api/streams/${router.query.id}` : null
+    router.query.id ? `/api/streams/${router.query.id}` : null,
+    {
+      refreshInterval: 1000,
+    }
   );
   const [sendMessage, { loading, data: sendMessageData }] = useMutation(
     `/api/streams/${router.query.id}/messages`
@@ -43,13 +46,23 @@ export default function StreamDetail() {
   const onValid = (form: MessageForm) => {
     if (loading) return;
     reset();
-    sendMessage(form);
+    mutate(
+      (prev) =>
+        prev &&
+        ({
+          ...prev,
+          stream: {
+            ...prev.stream,
+            messages: [
+              ...prev.stream.messages,
+              { id: Date.now(), message: form.message, user: { ...user } },
+            ],
+          },
+        } as any),
+      false
+    );
+    //sendMessage(form);
   };
-  useEffect(() => {
-    if (sendMessageData && sendMessageData.ok) {
-      mutate();
-    }
-  }, [sendMessageData, mutate]);
 
   return (
     <Layout canGoBack>
@@ -70,7 +83,7 @@ export default function StreamDetail() {
             <Message
               key={message.id}
               message={message.message}
-              reversed={message.user.id === user.id}
+              reversed={message.user.id === user?.id}
             />
           ))}
         </div>
