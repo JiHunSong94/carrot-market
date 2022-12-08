@@ -23,7 +23,7 @@ export default function Profile() {
         <div className="flex items-center space-x-3">
           {user?.avatar ? (
             <img
-              src={`https://imagedelivery.net/uaB8OCwMo25DlQ8NyNlAzw/${user?.avatar}/public`}
+              src={`https://imagedelivery.net/uaB8OCwMo25DlQ8NyNlAzw/${user?.avatar}/avatar`}
               className="h-16 w-16 rounded-full bg-slate-500"
             />
           ) : (

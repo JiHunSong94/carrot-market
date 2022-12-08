@@ -70,7 +70,7 @@ export default function EditProfile() {
     if (user?.phone) setValue("phone", user.phone);
     if (user?.avatar)
       setAvatarPreview(
-        `https://imagedelivery.net/uaB8OCwMo25DlQ8NyNlAzw/${user?.avatar}/public`
+        `https://imagedelivery.net/uaB8OCwMo25DlQ8NyNlAzw/${user?.avatar}/avatar`
       );
   }, [user, setValue]);
   useEffect(() => {
