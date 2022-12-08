@@ -31,18 +31,32 @@ export default function EditProfile() {
   } = useForm<EditProfileForm>();
   const [editProfile, { data, loading }] =
     useMutation<EditProfileResponse>("/api/users/me");
-  const onValid = ({ name, email, phone, avatar }: EditProfileForm) => {
+  const onValid = async ({ name, email, phone, avatar }: EditProfileForm) => {
     if (loading) return;
     if (email === "" && phone === "" && name === "") {
       setError("formErrors", {
         message: "Email OR Phone number are required. You need to choose one.",
       });
     }
-    editProfile({
-      name,
-      email,
-      phone,
-    });
+    if (avatar && avatar.length > 0) {
+      // ask for CF URL
+      const cloudflareRequest = await (await fetch("/api/files")).json();
+      console.log(cloudflareRequest);
+      //uploadfile to CF URL
+      return;
+      editProfile({
+        name,
+        email,
+        phone,
+        // avatarUrl: CF URL
+      });
+    } else {
+      editProfile({
+        name,
+        email,
+        phone,
+      });
+    }
   };
   useEffect(() => {
     if (user?.name) {
@@ -64,8 +78,8 @@ export default function EditProfile() {
   const avatar = watch("avatar");
   useEffect(() => {
     if (avatar && avatar.length > 0) {
-      const file = avatar[0]; // Imgae memory in Browser
-      setAvatarPreview(URL.createObjectURL(file)); // can approach image memory with url
+      const file = avatar[0];
+      setAvatarPreview(URL.createObjectURL(file));
     }
   }, [avatar]);
   return (
