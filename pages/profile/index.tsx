@@ -21,7 +21,14 @@ export default function Profile() {
     <Layout hasTabBar title="나의 캐럿">
       <div className="py-10 px-4">
         <div className="flex items-center space-x-3">
-          <div className="h-16 w-16 rounded-full bg-slate-500" />
+          {user?.avatar ? (
+            <img
+              src={`https://imagedelivery.net/uaB8OCwMo25DlQ8NyNlAzw/${user?.avatar}/public`}
+              className="h-16 w-16 rounded-full bg-slate-500"
+            />
+          ) : (
+            <div className="h-16 w-16 rounded-full bg-slate-500" />
+          )}
           <div className="flex flex-col">
             <span className="font-medium text-gray-900">{user?.name}</span>
             <Link href="/profile/edit">

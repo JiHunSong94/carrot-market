@@ -39,19 +39,22 @@ export default function EditProfile() {
       });
     }
     if (avatar && avatar.length > 0 && user) {
-      const { id, uploadURL } = await (await fetch("/api/files")).json();
+      const { uploadURL } = await (await fetch("/api/files")).json();
       const form = new FormData();
       form.append("file", avatar[0], user?.id + "");
-      await fetch(uploadURL, {
-        method: "POST",
-        body: form,
-      });
-      return;
+      const {
+        result: { id },
+      } = await (
+        await fetch(uploadURL, {
+          method: "POST",
+          body: form,
+        })
+      ).json();
       editProfile({
         name,
         email,
         phone,
-        // avatarUrl: CF URL
+        avatarId: id,
       });
     } else {
       editProfile({
@@ -62,15 +65,13 @@ export default function EditProfile() {
     }
   };
   useEffect(() => {
-    if (user?.name) {
-      setValue("name", user.name);
-    }
-    if (user?.email) {
-      setValue("email", user.email);
-    }
-    if (user?.phone) {
-      setValue("phone", user.phone);
-    }
+    if (user?.name) setValue("name", user.name);
+    if (user?.email) setValue("email", user.email);
+    if (user?.phone) setValue("phone", user.phone);
+    if (user?.avatar)
+      setAvatarPreview(
+        `https://imagedelivery.net/uaB8OCwMo25DlQ8NyNlAzw/${user?.avatar}/public`
+      );
   }, [user, setValue]);
   useEffect(() => {
     if (data && !data.ok && data.error) {
