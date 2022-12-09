@@ -39,13 +39,20 @@ export default function ItemDetail() {
     ); */
     toggleFav({});
   };
+  console.log(data);
   return (
     <Layout canGoBack>
       <div className="px-4 py-10">
         <div className="mb-8">
-          <div className="h-96 bg-slate-300" />
+          <img
+            src={`https://imagedelivery.net/uaB8OCwMo25DlQ8NyNlAzw/${data?.product.image}/public`}
+            className="h-96 bg-slate-300"
+          />
           <div className="flex cursor-pointer items-center space-x-3 border-t border-b py-3">
-            <div className="h-12 w-12 rounded-full bg-slate-300" />
+            <img
+              src={`https://imagedelivery.net/uaB8OCwMo25DlQ8NyNlAzw/${data?.product.user.avatar}/avatar`}
+              className="h-12 w-12 rounded-full bg-slate-300"
+            />
             <div>
               <p className="fond-medium text-sm text-gray-700">
                 {data?.product?.user?.name}
