@@ -6,6 +6,8 @@ import useUser from "@libs/client/useUser";
 import Head from "next/head";
 import useSWR from "swr";
 import { Product } from "@prisma/client";
+import Image from "next/image";
+import WindBreaker from "../public/WindBreaker.jpeg";
 
 export interface ProductWithCount extends Product {
   _count: {
@@ -54,6 +56,7 @@ export default function Home() {
           </svg>
         </FloatingButton>
       </div>
+      <Image src={WindBreaker} placeholder="blur" />
     </Layout>
   );
 }

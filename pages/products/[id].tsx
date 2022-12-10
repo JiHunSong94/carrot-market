@@ -39,7 +39,6 @@ export default function ItemDetail() {
     ); */
     toggleFav({});
   };
-  console.log(data);
   return (
     <Layout canGoBack>
       <div className="px-4 py-10">
