@@ -4,6 +4,7 @@ import useMutation from "@libs/client/useMutation";
 import useUser from "@libs/client/useUser";
 import { cls } from "@libs/client/utils";
 import { Product, User } from "@prisma/client";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import useSWR, { useSWRConfig } from "swr";
@@ -48,7 +49,9 @@ export default function ItemDetail() {
             className="h-96 bg-slate-300"
           />
           <div className="flex cursor-pointer items-center space-x-3 border-t border-b py-3">
-            <img
+            <Image
+              width={48}
+              height={48}
               src={`https://imagedelivery.net/uaB8OCwMo25DlQ8NyNlAzw/${data?.product.user.avatar}/avatar`}
               className="h-12 w-12 rounded-full bg-slate-300"
             />
