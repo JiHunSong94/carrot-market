@@ -44,10 +44,14 @@ export default function ItemDetail() {
     <Layout canGoBack>
       <div className="px-4 py-10">
         <div className="mb-8">
-          <img
-            src={`https://imagedelivery.net/uaB8OCwMo25DlQ8NyNlAzw/${data?.product.image}/public`}
-            className="h-96 bg-slate-300"
-          />
+          <div className="relative pb-80">
+            <Image
+              src={`https://imagedelivery.net/uaB8OCwMo25DlQ8NyNlAzw/${data?.product.image}/public`}
+              className="bg-slate-300 object-cover"
+              layout="fill"
+            />
+            <h1 className="absolute w-full text-center text-red-500">hello!</h1>
+          </div>
           <div className="flex cursor-pointer items-center space-x-3 border-t border-b py-3">
             <Image
               width={48}
