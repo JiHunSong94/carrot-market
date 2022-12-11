@@ -50,7 +50,6 @@ export default function ItemDetail() {
               className="bg-slate-300 object-cover"
               layout="fill"
             />
-            <h1 className="absolute w-full text-center text-red-500">hello!</h1>
           </div>
           <div className="flex cursor-pointer items-center space-x-3 border-t border-b py-3">
             <Image
