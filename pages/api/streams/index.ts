@@ -51,6 +51,9 @@ async function handler(
     let page =
       query.page && query.page !== undefined ? +query.page.toString() : 1;
     let skip: number = (page - 1) * 10;
+    if (!skip) {
+      skip = 1;
+    }
     const streams = await client.stream.findMany({
       take: 10,
       skip,

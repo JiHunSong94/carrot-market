@@ -23,6 +23,7 @@ export default function Pagination({ nowPage, dataSize }: PaginationProps) {
   const pageClick = (page: number) => {
     router.push(`${router.pathname}?page=${page}`);
   };
+
   useEffect(() => {
     if (nowPage !== undefined && nowPage > 3 && nowPage + 3 < maxPage) {
       setShowPage([
@@ -36,7 +37,7 @@ export default function Pagination({ nowPage, dataSize }: PaginationProps) {
     if (nowPage !== undefined && nowPage <= 3) {
       setShowPage([1, 2, 3, 4, 5]);
     }
-    if (nowPage !== undefined && nowPage + 3 >= maxPage) {
+    if (nowPage !== undefined && nowPage + 3 >= maxPage && maxPage !== 1) {
       setShowPage([
         maxPage - 4,
         maxPage - 3,
@@ -139,7 +140,7 @@ export default function Pagination({ nowPage, dataSize }: PaginationProps) {
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
-          stroke-width="1.5"
+          strokeWidth="1.5"
           stroke="currentColor"
           className="h-6 w-6"
         >
