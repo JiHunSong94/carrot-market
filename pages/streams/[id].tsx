@@ -67,7 +67,14 @@ export default function StreamDetail() {
   return (
     <Layout canGoBack>
       <div className="space-y-4 px-4 py-10">
-        <div className="aspect-video w-full rounded-sm bg-slate-300" />
+        {data?.stream.cloudflareId ? (
+          <iframe
+            className="aspect-video w-full rounded-md shadow-sm"
+            src={`https://customer-<CODE>.cloudflarestream.com/${data?.stream?.cloudflareId}/iframe`}
+            allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+            allowFullScreen={true}
+          ></iframe>
+        ) : null}
         <div>
           <h1 className="text-3xl font-bold text-gray-900">
             {data?.stream?.name}

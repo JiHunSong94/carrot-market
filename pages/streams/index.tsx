@@ -6,6 +6,7 @@ import { Stream } from "@prisma/client";
 import { useEffect, useState } from "react";
 import Pagination from "@components/pagination";
 import { useRouter } from "next/router";
+import Image from "next/image";
 
 interface StreamsResponse {
   ok: boolean;
@@ -30,7 +31,12 @@ export default function Streams() {
         {data?.streams?.map((stream) => (
           <Link key={stream.id} href={`/streams/${stream.id}`}>
             <div className="block px-4 pt-4">
-              <div className="aspect-video w-full rounded-md bg-slate-300 shadow-sm" />
+              <div className="relative aspect-video w-full overflow-hidden rounded-md bg-slate-300 shadow-sm">
+                <Image
+                  layout="fill"
+                  src={`https://videodelivery.net/${stream.cloudflareId}/thumbnails/thumbnail.jpg?height=320`}
+                />
+              </div>
               <h3 className="mt-2 text-2xl font-bold text-gray-900">
                 {stream.name}
               </h3>
