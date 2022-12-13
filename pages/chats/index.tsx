@@ -1,12 +1,20 @@
 import Link from "next/link";
 import Layout from "@components/layout";
+import useSWR from "swr";
+import { ChatRoom } from "@prisma/client";
+
+interface ChatResponse {
+  ok: boolean;
+  chatRooms: ChatRoom[];
+}
 
 export default function Chats() {
+  const { data } = useSWR<ChatResponse>("/api/chats");
   return (
     <Layout hasTabBar>
       <div className="divide-y-[1px]">
-        {[1, 1, 1, 1, 1, 1, 1].map((_, i) => (
-          <Link href={`/chats/${i}`} key={i}>
+        {data?.chatRooms.map((chatRoom) => (
+          <Link href={`/chats/${chatRoom.id}`} key={chatRoom.id}>
             <div className=" mb-3 flex cursor-pointer items-center space-x-3 px-4  py-3">
               <div className="h-12 w-12 rounded-full bg-slate-300" />
               <div>
