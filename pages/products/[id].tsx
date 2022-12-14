@@ -52,7 +52,6 @@ export default function ItemDetail() {
     if (user?.id === data?.product.user.id) {
       setIsYou(true);
     }
-    setIsYou(false);
     if (moveChatData?.ok) {
       router.push(`/chats/${moveChatData.chatRoomId}`);
     }
@@ -66,6 +65,7 @@ export default function ItemDetail() {
               src={`https://imagedelivery.net/uaB8OCwMo25DlQ8NyNlAzw/${data?.product.image}/public`}
               className="bg-slate-300 object-cover"
               layout="fill"
+              alt="bigItemImage"
             />
           </div>
           <div className="flex cursor-pointer items-center space-x-3 border-t border-b py-3">
@@ -74,6 +74,7 @@ export default function ItemDetail() {
               height={48}
               src={`https://imagedelivery.net/uaB8OCwMo25DlQ8NyNlAzw/${data?.product.user.avatar}/avatar`}
               className="h-12 w-12 rounded-full bg-slate-300"
+              alt="avatarImage"
             />
             <div>
               <p className="fond-medium text-sm text-gray-700">

@@ -21,7 +21,6 @@ async function handler(
       id: true,
     },
   });
-  console.log(alreadyExists);
   if (alreadyExists) {
     await client.wondering.delete({
       where: {

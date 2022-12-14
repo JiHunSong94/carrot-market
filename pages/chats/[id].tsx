@@ -76,15 +76,15 @@ export default function ChatDetail() {
     <Layout
       canGoBack
       title={
-        user?.id === data?.chatRoom.sellerId
+        user?.id === data?.chatRoom?.sellerId
           ? data?.chatRoom.buyer.name
-          : user?.id === data?.chatRoom.buyerId
+          : user?.id === data?.chatRoom?.buyerId
           ? data?.chatRoom.seller.name
           : ""
       }
     >
       <div className="h-[85vh] space-y-4 overflow-y-scroll px-4 pt-2">
-        {data?.chatRoom.chatMessages.map((message, index) => (
+        {data?.chatRoom?.chatMessages.map((message, index) => (
           <div key={index} ref={scrollRef}>
             <Message
               message={message.message}

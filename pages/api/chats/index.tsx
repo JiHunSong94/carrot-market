@@ -12,13 +12,12 @@ async function handler(
     session: { user },
     body: { product },
   } = req;
-
   if (req.method === "POST") {
     const alreadyExist = await client.chatRoom.findFirst({
       where: {
         productId: product.id,
         buyerId: user?.id,
-        sellerId: product.user.id,
+        sellerId: product.userId,
       },
       select: {
         id: true,
@@ -42,7 +41,7 @@ async function handler(
           },
           seller: {
             connect: {
-              id: user?.id,
+              id: product.userId,
             },
           },
         },
@@ -53,7 +52,29 @@ async function handler(
   if (req.method === "GET") {
     const chatRooms = await client.chatRoom.findMany({
       where: {
-        buyerId: user!.id,
+        OR: [{ buyerId: user?.id }, { sellerId: user?.id }],
+      },
+      include: {
+        seller: {
+          select: {
+            id: true,
+            name: true,
+            avatar: true,
+          },
+        },
+        chatMessages: {
+          select: {
+            id: true,
+            message: true,
+            user: {
+              select: {
+                id: true,
+                name: true,
+                avatar: true,
+              },
+            },
+          },
+        },
       },
     });
     res.json({ ok: true, chatRooms });

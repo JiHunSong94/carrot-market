@@ -28,7 +28,6 @@ export default function Create() {
   };
   const [createStream, { data, loading }] =
     useMutation<CreateResponse>(`/api/streams`);
-  console.log(data);
   useEffect(() => {
     if (data && data.ok) {
       router.push(`/streams/${data.stream.id}`);

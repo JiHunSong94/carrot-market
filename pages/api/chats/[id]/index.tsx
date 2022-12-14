@@ -12,11 +12,10 @@ async function handler(
     query: { id },
     session: { user },
   } = req;
-  const chatRoom = await client.chatRoom.findUnique({
+  const chatRoom = await client.chatRoom.findFirst({
     where: {
-      id: Number(id),
+      OR: [{ buyerId: user?.id }, { sellerId: user?.id }],
     },
-
     include: {
       chatMessages: {
         select: {
