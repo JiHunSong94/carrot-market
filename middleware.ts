@@ -2,7 +2,7 @@ import type { NextRequest, NextFetchEvent } from "next/server";
 import { NextResponse, userAgent } from "next/server";
 
 export function middleware(req: NextRequest, ev: NextFetchEvent) {
-  if (!userAgent(req).isBot) {
+  if (userAgent(req).isBot) {
     req.nextUrl.searchParams.set("from", req.nextUrl.pathname);
     req.nextUrl.pathname = "/404";
     return NextResponse.redirect(req.nextUrl);
