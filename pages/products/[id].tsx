@@ -57,7 +57,7 @@ export default function ItemDetail() {
     }
   }, [user, data, moveChatData, router]);
   return (
-    <Layout canGoBack>
+    <Layout canGoBack seoTitle="Product Detail">
       <div className="px-4 py-10">
         <div className="mb-8">
           <div className="relative pb-80">

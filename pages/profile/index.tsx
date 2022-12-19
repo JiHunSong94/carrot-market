@@ -18,7 +18,7 @@ export default function Profile() {
   const { user } = useUser();
   const { data } = useSWR<ReviewsResponse>("/api/reviews");
   return (
-    <Layout hasTabBar title="나의 캐럿">
+    <Layout hasTabBar seoTitle="나의 캐럿" title="나의 캐럿">
       <div className="py-10 px-4">
         <div className="flex items-center space-x-3">
           {user?.avatar ? (

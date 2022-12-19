@@ -58,7 +58,7 @@ export default function Upload() {
     }
   }, [photo]);
   return (
-    <Layout canGoBack title="Upload Product">
+    <Layout canGoBack seoTitle="Upload Product">
       <form onSubmit={handleSubmit(onValid)} className="space-y-4 p-4">
         <div>
           {photoPreview ? (

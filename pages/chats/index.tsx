@@ -18,7 +18,7 @@ export default function Chats() {
   const { user } = useUser();
   const { data } = useSWR<ChatResponse>("/api/chats");
   return (
-    <Layout hasTabBar>
+    <Layout hasTabBar seoTitle="채팅" title="채 팅">
       <div className="divide-y-[1px]">
         {data?.chatRooms?.map((chatRoom) => (
           <Link href={`/chats/${chatRoom.id}`} key={chatRoom.id}>

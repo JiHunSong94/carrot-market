@@ -26,7 +26,7 @@ export default function Community() {
       : null
   );
   return (
-    <Layout hasTabBar title="동네생활">
+    <Layout hasTabBar seoTitle="동네생활" title="동네생활">
       <div className="space-y-8 px-4">
         {data?.posts.map((post) => (
           <Link key={post.id} href={`/community/${post.id}`}>
