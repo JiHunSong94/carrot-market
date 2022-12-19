@@ -16,21 +16,16 @@ async function handler(
     where: {
       id: +id!.toString(),
     },
-    select: {
-      id: true,
-      createdAt: true,
-      updatedAt: true,
-      name: true,
-      description: true,
-      price: true,
-      userId: true,
-      cloudflareId: true,
-      messages: {
+    include: {
+      streamMessage: {
         select: {
           id: true,
           message: true,
           user: {
-            select: { avatar: true, id: true },
+            select: {
+              avatar: true,
+              id: true,
+            },
           },
         },
       },

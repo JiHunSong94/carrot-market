@@ -8,11 +8,12 @@ import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 
 const Bs = dynamic(
+  //@ts-ignore
   () =>
     new Promise((resolve) =>
       setTimeout(() => resolve(import("@components/bs")), 10000)
     ),
-  { ssr: false, suspense: true, loading: () => <span>Loading</span> }
+  { ssr: false }
 );
 
 interface EnterForm {
@@ -123,7 +124,7 @@ export default function Enter() {
               ) : null}
               {method === "phone" ? (
                 <>
-                  <Suspense fallback={"Loading something big."}>
+                  <Suspense fallback={<button>loading!!</button>}>
                     <Bs />
                   </Suspense>
                   <Input

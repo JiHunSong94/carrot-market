@@ -29,8 +29,8 @@ async function handler(
   }
   if (req.method === "GET") {
     const { latitude, longitude } = req.query;
-    const parsedlatitude = parseFloat(latitude.toString());
-    const parsedlongitude = parseFloat(longitude.toString());
+    const parsedlatitude = parseFloat(latitude!.toString());
+    const parsedlongitude = parseFloat(longitude!.toString());
     const posts = await client.post.findMany({
       include: {
         user: {
