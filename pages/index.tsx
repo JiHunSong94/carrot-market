@@ -1,12 +1,11 @@
-import Link from "next/link";
 import FloatingButton from "@components/floating-button";
 import Item from "@components/item";
 import Layout from "@components/layout";
-import useUser from "@libs/client/useUser";
-import Head from "next/head";
 import useSWR from "swr";
 import { Product } from "@prisma/client";
-import Image from "next/image";
+import useUser from "@libs/client/useUser";
+import Head from "next/head";
+import client from "@libs/server/client";
 
 export interface ProductWithCount extends Product {
   _count: {
@@ -19,21 +18,23 @@ interface ProductsResponse {
   products: ProductWithCount[];
 }
 
-export default function Home() {
-  const { data } = useSWR<ProductsResponse>("/api/products");
+export default function Home({ products }: any) {
+  const { user, isLoading } = useUser();
+  // const { data } = useSWR<ProductsResponse>("/api/products");
+  console.log(products);
   return (
     <Layout title="홈" hasTabBar>
       <Head>
         <title>Home</title>
       </Head>
       <div className="flex flex-col space-y-5 py-4">
-        {data?.products?.map((product) => (
+        {products?.map((product: any) => (
           <Item
             id={product.id}
             key={product.id}
             title={product.name}
             price={product.price}
-            hearts={product._count.favs}
+            hearts={product._count?.favs}
             image={product.image}
           />
         ))}
@@ -57,4 +58,9 @@ export default function Home() {
       </div>
     </Layout>
   );
+}
+
+export async function getServerSideProps() {
+  const products = await client?.product.findMany({});
+  return { props: { products: JSON.parse(JSON.stringify(products)) } };
 }
