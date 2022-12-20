@@ -25,7 +25,7 @@ export default function Layout({
   return (
     <div>
       <Head>
-        <title>{seoTitle} | Carrot Market</title>
+        <title>{`${seoTitle} | Carrot Market`}</title>
       </Head>
       <div className="fixed top-0 flex h-12 w-full max-w-xl items-center justify-center  border-b bg-white px-10 text-lg  font-medium text-gray-800">
         {canGoBack ? (
