@@ -20,7 +20,7 @@ interface ProductsResponse {
 }
 
 export function Home() {
-  const { user, isLoading } = useUser();
+  const { user } = useUser();
   const { data } = useSWR<ProductsResponse>("/api/products");
   return (
     <Layout title="홈" hasTabBar>
@@ -80,7 +80,7 @@ const Page: NextPage<{ products: ProductWithCount[] }> = ({ products }) => {
 };
 
 export const getServerSideProps = async () => {
-  const products = await client?.product.findMany({});
+  const products = await client.product.findMany({});
   return { props: { products: JSON.parse(JSON.stringify(products)) } };
 };
 
