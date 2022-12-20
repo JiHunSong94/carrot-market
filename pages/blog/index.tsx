@@ -11,7 +11,7 @@ interface Post {
   slug: string;
 }
 
-const Blog: NextPage<{ posts: Post }> = ({ posts }) => {
+const Blog: NextPage<{ posts: Post[] }> = ({ posts }) => {
   return (
     <Layout title="Blog" seoTitle="Blog">
       <h1 className="mb-10 mt-5 text-xl font-semibold">Latest Posts:</h1>

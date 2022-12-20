@@ -10,6 +10,7 @@ function CustomUser() {
 }
 
 export default function App({ Component, pageProps }: AppProps) {
+  console.log("APP IS RUNNING");
   return (
     <SWRConfig
       value={{
@@ -21,7 +22,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <CustomUser />
         <Component {...pageProps} />
       </div>
-      <Script
+      {/* <Script
         src="https://developers.kakao.com/sdk/js/kakao.js"
         strategy="lazyOnload"
       />
@@ -37,7 +38,7 @@ export default function App({ Component, pageProps }: AppProps) {
             });
           };
         }}
-      />
+      /> */}
     </SWRConfig>
   );
 }
