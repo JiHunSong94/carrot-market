@@ -50,6 +50,7 @@ async function handler(
     }
   }
   if (req.method === "GET") {
+    await new Promise((resolve) => setTimeout(resolve, 5000));
     const chatRooms = await client.chatRoom.findMany({
       where: {
         OR: [{ buyerId: user?.id }, { sellerId: user?.id }],

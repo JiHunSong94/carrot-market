@@ -80,6 +80,7 @@ const Page: NextPage<{ products: ProductWithCount[] }> = ({ products }) => {
 };
 
 export const getServerSideProps = async () => {
+  console.log("SSR");
   const products = await client.product.findMany({});
   return { props: { products: JSON.parse(JSON.stringify(products)) } };
 };
