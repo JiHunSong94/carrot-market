@@ -82,7 +82,7 @@ export default function EditProfile() {
   const avatar = watch("avatar");
   useEffect(() => {
     if (avatar && avatar.length > 0) {
-      const file = avatar[0];
+      const file: any = avatar[0];
       setAvatarPreview(URL.createObjectURL(file));
     }
   }, [avatar]);

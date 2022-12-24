@@ -33,7 +33,7 @@ export default function Streams() {
             <div className="block px-4 pt-4">
               <div className="relative aspect-video w-full overflow-hidden rounded-md bg-slate-300 shadow-sm">
                 <Image
-                  layout="fill"
+                  alt="stream"
                   src={`https://videodelivery.net/${stream.cloudflareId}/thumbnails/thumbnail.jpg?height=320`}
                 />
               </div>

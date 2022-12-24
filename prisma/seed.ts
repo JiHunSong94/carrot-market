@@ -2,7 +2,7 @@ import { Prisma, PrismaClient } from "@prisma/client";
 
 const client = new PrismaClient();
 
-async function main() {
+/* async function main() {
   [...Array.from(Array(500).keys())].forEach(async (item) => {
     await client.stream.create({
       data: {
@@ -22,4 +22,4 @@ async function main() {
 
 main()
   .catch((e) => console.log(e))
-  .finally(() => client.$disconnect());
+  .finally(() => client.$disconnect()); */

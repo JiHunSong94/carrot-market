@@ -4,13 +4,13 @@ import { useEffect, useState } from "react";
 
 interface PaginationProps {
   nowPage: number;
-  dataSize: number;
+  dataSize: number | undefined;
 }
 type Direction = "prev" | "next";
 
 export default function Pagination({ nowPage, dataSize }: PaginationProps) {
   const router = useRouter();
-  const maxPage = Number((dataSize / 10).toFixed()) + 1;
+  const maxPage = Number((dataSize! / 10).toFixed()) + 1;
   const [showPage, setShowPage] = useState<number[]>([]);
   const arrowClick = (direction: Direction) => {
     if (direction === "prev") {
