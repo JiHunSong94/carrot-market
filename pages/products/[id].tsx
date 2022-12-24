@@ -4,11 +4,13 @@ import useMutation from "@libs/client/useMutation";
 import useUser from "@libs/client/useUser";
 import { cls } from "@libs/client/utils";
 import { Product, User } from "@prisma/client";
+import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import useSWR, { useSWRConfig } from "swr";
+import client from "@libs/server/client";
 
 interface ProductWithUser extends Product {
   user: User;
@@ -21,7 +23,11 @@ interface ItemDetailResponse {
   isLiked: boolean;
 }
 
-export default function ItemDetail() {
+const ItemDetail: NextPage<ItemDetailResponse> = ({
+  product,
+  relatedProducts,
+  isLiked,
+}) => {
   const { user, isLoading } = useUser();
   const router = useRouter();
   const [isYou, setIsYou] = useState(false);
@@ -62,7 +68,7 @@ export default function ItemDetail() {
         <div className="mb-8">
           <div className="relative pb-80">
             <Image
-              src={`https://imagedelivery.net/uaB8OCwMo25DlQ8NyNlAzw/${data?.product.image}/public`}
+              src={`https://imagedelivery.net/uaB8OCwMo25DlQ8NyNlAzw/${product.image}/public`}
               className="bg-slate-300 object-cover"
               layout="fill"
               alt="bigItemImage"
@@ -72,15 +78,15 @@ export default function ItemDetail() {
             <Image
               width={48}
               height={48}
-              src={`https://imagedelivery.net/uaB8OCwMo25DlQ8NyNlAzw/${data?.product.user.avatar}/avatar`}
+              src={`https://imagedelivery.net/uaB8OCwMo25DlQ8NyNlAzw/${product.user.avatar}/avatar`}
               className="h-12 w-12 rounded-full bg-slate-300"
               alt="avatarImage"
             />
             <div>
               <p className="fond-medium text-sm text-gray-700">
-                {data?.product?.user?.name}
+                {product?.user?.name}
               </p>
-              <Link href={`/users/profiles/${data?.product?.user?.id}`}>
+              <Link href={`/users/profiles/${product?.user?.id}`}>
                 <p className="text-xs font-medium text-gray-500">
                   View profile &rarr;
                 </p>
@@ -89,13 +95,13 @@ export default function ItemDetail() {
           </div>
           <div className="mt-5">
             <h1 className="text-3xl font-bold text-gray-900">
-              {data?.product?.name}
+              {product?.name}
             </h1>
             <p className="mt-3 block text-3xl text-gray-900">
-              ${data?.product?.price}
+              ${product?.price}
             </p>
             <p className="my-6 text-base text-gray-700">
-              {data?.product?.description}
+              {product?.description}
             </p>
             {isYou ? null : (
               <div className="flex items-center justify-between space-x-2">
@@ -108,12 +114,12 @@ export default function ItemDetail() {
                   onClick={onFavClick}
                   className={cls(
                     "flex items-center justify-center rounded-md p-3 hover:bg-gray-100",
-                    data?.isLiked
+                    isLiked
                       ? "text-red-400  hover:text-red-500"
                       : "text-gray-400  hover:text-gray-500"
                   )}
                 >
-                  {data?.isLiked ? (
+                  {isLiked ? (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
@@ -146,7 +152,7 @@ export default function ItemDetail() {
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Similar items</h2>
           <div className="grid grid-cols-2 gap-4">
-            {data?.relatedProducts?.map((product) => (
+            {relatedProducts?.map((product) => (
               <div key={product.id}>
                 <div className="mb-4 h-56 w-full bg-slate-300" />
                 <h3 className="-mb-1 text-gray-700">{product.name}</h3>
@@ -160,4 +166,56 @@ export default function ItemDetail() {
       </div>
     </Layout>
   );
-}
+};
+
+export const getStaticPaths: GetStaticPaths = () => {
+  return {
+    paths: [],
+    fallback: "blocking",
+  };
+};
+
+export const getStaticProps: GetStaticProps = async (context) => {
+  if (!context?.params?.id) {
+    return {
+      props: {},
+    };
+  }
+  const product = await client.product.findUnique({
+    where: {
+      id: +context.params.id.toString(),
+    },
+    include: {
+      user: {
+        select: {
+          id: true,
+          name: true,
+          avatar: true,
+        },
+      },
+    },
+  });
+  const terms = product?.name.split(" ").map((word) => ({
+    name: { contains: word },
+  }));
+  const relatedProducts = await client.product.findMany({
+    where: {
+      OR: terms,
+      AND: {
+        id: {
+          not: product?.id,
+        },
+      },
+    },
+  });
+  const isLiked = false;
+  return {
+    props: {
+      product: JSON.parse(JSON.stringify(product)),
+      relatedProducts: JSON.parse(JSON.stringify(relatedProducts)),
+      isLiked,
+    },
+  };
+};
+
+export default ItemDetail;

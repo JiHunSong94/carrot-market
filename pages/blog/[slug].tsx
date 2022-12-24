@@ -35,7 +35,6 @@ export const getStaticProps: GetStaticProps = async (context) => {
     .use(remarkParse)
     .use(remarkHtml)
     .process(content);
-  console.log(data);
   return {
     props: { data, post: String(html) },
   };
