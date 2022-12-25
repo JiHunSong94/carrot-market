@@ -3,11 +3,18 @@ import TextArea from "@components/textarea";
 import useMutation from "@libs/client/useMutation";
 import { cls } from "@libs/client/utils";
 import { Answer, Post, User } from "@prisma/client";
+import {
+  GetStaticPaths,
+  GetStaticProps,
+  NextPage,
+  NextPageContext,
+} from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import useSWR from "swr";
+import useSWR, { SWRConfig } from "swr";
+import client from "@libs/server/client";
 
 interface AnswerWithUser extends Answer {
   user: User;
@@ -37,7 +44,7 @@ interface AnswerResponse {
   response: Answer;
 }
 
-export default function CommutinyPostDetail() {
+const CommunityPostDetail: NextPage<CommunityPostResponse> = ({ post }) => {
   const router = useRouter();
   const { register, handleSubmit, reset } = useForm<AnswerForm>();
   const { data, mutate } = useSWR<CommunityPostResponse>(
@@ -105,7 +112,7 @@ export default function CommutinyPostDetail() {
         <div>
           <div className="mt-2 px-4 text-gray-700">
             <span className="font-medium text-orange-500">Q.</span>{" "}
-            {data?.post?.question}
+            {post?.question}
           </div>
           <div className="mt-3 flex w-full space-x-5 border-t border-b-[2px] px-4 py-2.5 text-gray-700">
             <button
@@ -129,7 +136,7 @@ export default function CommutinyPostDetail() {
                   d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                 ></path>
               </svg>
-              <span>궁금해요 {data?.post?._count.wonderings}</span>
+              <span>궁금해요 {post?._count.wonderings}</span>
             </button>
             <span className="flex items-center space-x-2 text-sm">
               <svg
@@ -146,12 +153,12 @@ export default function CommutinyPostDetail() {
                   d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
                 ></path>
               </svg>
-              <span>답변 {data?.post?._count.answers}</span>
+              <span>답변 {post?._count.answers}</span>
             </span>
           </div>
         </div>
         <div className="my-5 space-y-5 px-4">
-          {data?.post?.answers.map((answer) => (
+          {post?.answers.map((answer) => (
             <div key={answer.id} className="flex items-start space-x-3">
               <div className="h-8 w-8 rounded-full bg-slate-400" />
               <div>
@@ -180,4 +187,58 @@ export default function CommutinyPostDetail() {
       </div>
     </Layout>
   );
-}
+};
+
+export const getStaticPaths: GetStaticPaths = () => {
+  return {
+    paths: [],
+    fallback: "blocking",
+  };
+};
+
+export const getStaticProps: GetStaticProps = async (context) => {
+  if (!context.params?.id) {
+    return {
+      props: {},
+    };
+  }
+  const post = await client.post.findUnique({
+    where: {
+      id: +context.params.id.toString(),
+    },
+    include: {
+      user: {
+        select: {
+          id: true,
+          name: true,
+          avatar: true,
+        },
+      },
+      answers: {
+        select: {
+          answer: true,
+          id: true,
+          createdAt: true,
+          user: {
+            select: {
+              id: true,
+              name: true,
+              avatar: true,
+            },
+          },
+        },
+      },
+      _count: {
+        select: {
+          answers: true,
+          wonderings: true,
+        },
+      },
+    },
+  });
+  return {
+    props: { post: JSON.parse(JSON.stringify(post)) },
+  };
+};
+
+export default CommunityPostDetail;

@@ -62,13 +62,6 @@ const ItemDetail: NextPage<ItemDetailResponse> = ({
       router.push(`/chats/${moveChatData.chatRoomId}`);
     }
   }, [user, data, moveChatData, router]);
-  if (router.isFallback) {
-    return (
-      <Layout title="Loading for you...">
-        <span>I love you</span>
-      </Layout>
-    );
-  }
   return (
     <Layout canGoBack seoTitle="Product Detail">
       <div className="px-4 py-10">
@@ -178,7 +171,7 @@ const ItemDetail: NextPage<ItemDetailResponse> = ({
 export const getStaticPaths: GetStaticPaths = () => {
   return {
     paths: [],
-    fallback: "true",
+    fallback: "blocking",
   };
 };
 
