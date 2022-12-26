@@ -4,12 +4,7 @@ import { SWRConfig } from "swr";
 import useUser from "@libs/client/useUser";
 import Script from "next/script";
 
-function CustomUser() {
-  const { user } = useUser();
-  return null;
-}
-
-export default function App({ Component, pageProps }: AppProps) {
+function MyApp({ Component, pageProps }: AppProps) {
   console.log("APP IS RUNNING");
   return (
     <SWRConfig
@@ -19,7 +14,6 @@ export default function App({ Component, pageProps }: AppProps) {
       }}
     >
       <div className="mx-auto w-full max-w-xl">
-        <CustomUser />
         <Component {...pageProps} />
       </div>
       {/* <Script
@@ -42,3 +36,5 @@ export default function App({ Component, pageProps }: AppProps) {
     </SWRConfig>
   );
 }
+
+export default MyApp;
