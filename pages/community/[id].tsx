@@ -11,7 +11,7 @@ import {
 } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import useSWR, { SWRConfig } from "swr";
 import client from "@libs/server/client";
@@ -47,9 +47,13 @@ interface AnswerResponse {
 const CommunityPostDetail: NextPage<CommunityPostResponse> = ({ post }) => {
   const router = useRouter();
   const { register, handleSubmit, reset } = useForm<AnswerForm>();
-  const { data, mutate } = useSWR<CommunityPostResponse>(
-    router.query.id ? `/api/posts/${router.query.id}` : null
-  );
+  const [url, setUrl] = useState("");
+  useEffect(() => {
+    if (router.query.id) {
+      setUrl(`/api/posts/${router.query.id}`);
+    }
+  }, [router]);
+  const { data, mutate } = useSWR<CommunityPostResponse>(url);
   const [wonder, { loading }] = useMutation(
     `/api/posts/${router.query.id}/wonder`
   );
