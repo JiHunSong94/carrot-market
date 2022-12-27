@@ -3,20 +3,18 @@ import { NextResponse, userAgent } from "next/server";
 
 export function middleware(req: NextRequest, ev: NextFetchEvent) {
   if (userAgent(req).isBot) {
-    req.nextUrl.searchParams.set("from", req.nextUrl.pathname);
-    req.nextUrl.pathname = "/pages/_error";
-    return NextResponse.redirect(req.nextUrl);
+    return NextResponse.redirect(new URL("/403", req.url));
   }
-  if (
-    !req.cookies.has("carrotsession") &&
-    !req.nextUrl.pathname.includes("/enter")
-  ) {
-    req.nextUrl.searchParams.set("from", req.nextUrl.pathname);
-    req.nextUrl.pathname = "/enter";
-    return NextResponse.redirect(req.nextUrl);
+  if (!req.url.includes("/api")) {
+    if (
+      !req.cookies.has("carrotsession") &&
+      !req.nextUrl.pathname.includes("/enter")
+    ) {
+      return NextResponse.redirect(new URL("/enter", req.url));
+    }
   }
 }
 
 export const config = {
-  matcher: "/pages/:path*",
+  matcher: "/",
 };
